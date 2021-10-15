@@ -10,7 +10,7 @@ public class MemberRepository {
 	@Autowired
 	private SqlSessionTemplate session;
 	
-	public String selectPasswordByUserId(String userId) {
+	public String selectPasswordByUserId(String userId) { //변수명과 mybatisMapper의 #{userId} 와 같아야함
 		return session.selectOne("com.kh.spring.mybatis.MybatisMapper.selectPasswordByUserId", userId);
 	}
 

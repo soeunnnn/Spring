@@ -16,7 +16,7 @@
 		<property name="configLocation" value="classpath:mybatis/config.xml"/>
 	</bean>
 
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"> <!-- 꼭 등록 해줘야함  -->
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 
