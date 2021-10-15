@@ -22,7 +22,7 @@ public class MemberControllerTest {
 	
 	//MockMVC : http 요청 및 응답 상황 테스트를 위한 객체
 	
-	@Autowired
+	@Autowired //주입받기
 	WebApplicationContext wac;
 	MockMvc mockMvc;
 	
@@ -35,7 +35,7 @@ public class MemberControllerTest {
 	public void searchPassword() throws Exception {
 		mockMvc
 		 .perform(get("/search-pw"))
-		 .andExpect(status().isOk())
+		 .andExpect(status().isOk()) //응답이 200번로 넘어왔을때만 test가 통과되도록
 		 .andDo(print());
 	}
 	

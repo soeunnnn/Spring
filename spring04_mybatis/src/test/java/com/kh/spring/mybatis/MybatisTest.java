@@ -22,7 +22,7 @@ import com.kh.spring.member.model.dto.Member;
 @RunWith(SpringJUnit4ClassRunner.class)
 
 //가상의 applicationContext를 생성할 때 사용할 spring bean 설정파일의 위치를 지정
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/**/*-context.xml"})
+@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/**/*-context.xml"}) //**모든폴더의 *모든타입(-context.xml로 끝나는)
 public class MybatisTest {
 	//Junit annotation
 	//@Before : 테스트 전에 실행될 메서드
@@ -64,7 +64,7 @@ public class MybatisTest {
 	@Test
 	public void insertWithDto() {
 		Member member = new Member();
-		member.setUserId("mybatis");
+		member.setUserId("spring-easy");
 		member.setPassword("abcdefg");
 		member.setEmail("pclass@kh.com");
 		member.setTell("010-0000-1111");
@@ -75,7 +75,7 @@ public class MybatisTest {
 	@Test
 	public void insertWithMap() {
 		Member member = new Member();
-		member.setUserId("pclass");
+		member.setUserId("spring-easy");
 		
 		Map<String,Object> commandMap = new HashMap<String,Object>();
 		commandMap.put("member", member);

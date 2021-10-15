@@ -12,7 +12,7 @@
   		select * from member where user_id = #{userId}
   	</select>
   
-  	<select id="selectRentAndMemberByUserId" resultType="map">
+  	<select id="selectRentAndMemberByUserId" resultType="map">  <!-- join으로 데이터를 뽑을 경우에는 map으로 지정 -->
   		select *
   		from member
   		inner join rent_master using(user_id)
@@ -40,6 +40,8 @@
  		inner join rent_book using(rm_idx)
  		where user_id = #{userId}
  	</select>
+  
+    <!-- insert, update, delete 같은 경우는 반환받을 타입이 int 이기 때문에 resultType 지정 안해도 됨  -->
   
   	<insert id="insertWithDto">
   		insert into member(user_id, password, tell, email)
