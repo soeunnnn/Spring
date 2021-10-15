@@ -75,7 +75,7 @@ public class MybatisTest {
 	@Test
 	public void insertWithMap() {
 		Member member = new Member();
-		member.setUserId("spring-easy");
+		member.setUserId("pclass");
 		
 		Map<String,Object> commandMap = new HashMap<String,Object>();
 		commandMap.put("member", member);
