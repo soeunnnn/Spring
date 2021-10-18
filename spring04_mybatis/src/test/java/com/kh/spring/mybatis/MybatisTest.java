@@ -29,6 +29,14 @@ public class MybatisTest {
 	//@Test : 테스트 메서드
 	//@After : 테스트 이후에 실행될 메서드
 	
+	//SqlSessionTemplate의 주요 메서드
+	//selectOne : 단일행 select문 실행
+	//selectList : 다중행 select문 실행
+	//insert : 메서드의 결과값은 쿼리에 의해 영향을 받은 row 수
+	//update : 메서드의 결과값은 쿼리에 의해 영향을 받은 row 수
+	//delete : 메서드의 결과값은 쿼리에 의해 영향을 받은 row 수
+	//** procedure 호출은 dml 쿼리메서드 중에서 선택
+	
 	@Autowired
 	private SqlSessionTemplate session;
 	private final String NAMESPACE = "com.kh.spring.mybatis.MybatisMapper.";
@@ -100,11 +108,59 @@ public class MybatisTest {
 		session.update(NAMESPACE + "update", member);
 	}
 	
+	@Test
+	public void procedure() {
+		session.update(NAMESPACE + "procedure", "100001");
+	}
+
+	//mybatis mapper escape 처리
+	//<![CDATA[escape 처리할 내용]]>
+	//비교연산자 escape
+	// &lt;(작다) &lt;=(작거나 같다) &gt;(크다) &gt;=(크거나 같다)
 	
+	// 1. 도서명 : 쿠키와 세션,
+	// 작가 : 김영아
+	// 도서번호 : 시퀀스 사용
+	// 인 도서를 BOOK 테이블에 저장하기
+	// 메서드 이름 : test01
+	@Test
+	public void test01() {
+		Map<String, Object> bookMap = new HashMap<String, Object>();
+		bookMap.put("title", "쿠키와 세션");
+		bookMap.put("author", "김영아");
+		session.insert(NAMESPACE + "test01", bookMap);
+	}
+
+	// 2. 연장횟수가 2회 이상인 모든 대출도서 정보를
+	// 연장횟수 0회로 초기화 해주세요.
+	// 메서드 이름 : test02
+	@Test
+	public void test02() {
+		Map<String, Object> rentBookMap = new HashMap<String, Object>();
+		rentBookMap.put("num1", 0);
+		rentBookMap.put("num2", 2);
+		session.update(NAMESPACE + "test02", rentBookMap);
+	}
 	
-	
-	
-	
+
+	// 3. 2021년 9월 이후 10월 이전에 가입된 회원정보를 삭제
+	// 메서드 이름 : test03
+	@Test
+	public void test03() {
+		Map<String, Object> dateMap = new HashMap<String, Object>();
+		dateMap.put("date1", "20210901");
+		dateMap.put("date2", "20211001");
+		session.delete(NAMESPACE + "test03", dateMap);
+	}
+
+	// 4. 대출 횟수가 가장 많은 3권의 도서를 조회
+	// 메서드 이름 : test04
+	@Test
+	public void test04() {
+		session.selectList(NAMESPACE+"test04");
+		
+	}
+
 	
 	
 	

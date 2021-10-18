@@ -60,8 +60,37 @@
   	<update id="update">
   		update member set password = #{password} where user_id = #{userId}
   	</update>
+  	
+  	<!--
+  	 마이바티스의 기본 statement 객체는 PreparedStatement 이다.
+  	 statementType 속성을 사용해 변경이 가능하다.
+  	 statement, prepared, callable
+  	-->
+  	
+  	<update id="procedure" statementType="CALLABLE">
+  		{call sp_rent_extend(#{rbIdx, mode=IN})}
+  	</update>
 
+	<insert id="test01">
+		insert into book(TITLE, AUTHOR, BK_IDX)
+		values(#{title}, #{author}, sc_bk_idx.nextval)	
+	</insert>
   
+  	<update id="test02">
+  		update rent_book set EXTENSION_CNT = #{num1} 
+  		where EXTENSION_CNT >= #{num2}
+  	</update>
   
+  	<delete id="test03">
+  		delete from member 
+  		where REG_DATE &gt; to_date(#{date1}, 'YYYYMMDD')
+  		and REG_DATE &lt; to_date(#{date2}, 'YYYYMMDD')
+  	</delete>
+  
+  	<select id="test04" resultType="map">
+  		select *
+  		from (select * from book order by RENT_CNT DESC)
+  		where ROWNUM &lt; 4
+  	</select>
   
   </mapper>
