@@ -104,7 +104,12 @@ input[type=submit]{
    </table>
    </form>
    
-   <script type="text/javascript" src="/resources/js/member/joinForm.js"></script>
+   
+   <%--
+    <script type="text/javascript" src="/resources/js/member/joinForm.js"></script>
+    --%>
+   
+   
 
 
 </body>

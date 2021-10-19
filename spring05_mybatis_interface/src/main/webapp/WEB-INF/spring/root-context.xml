@@ -21,6 +21,6 @@
 		<constructor-arg index="0" ref="sqlSessionFactory"/>
 	</bean>
 	
-	<mybatis-spring:scan base-package="com.kh.spring" annotation="org.apache.ibatis.annotations.Mapper"/>
+	<mybatis-spring:scan base-package="com.kh.spring" annotation="org.apache.ibatis.annotations.Mapper"/>  <!--annotation속성 : mapper 어노테이션이 있는 애들만 매퍼인터페이스로 등록을 하겠다고 지정  -->
 
 </beans>

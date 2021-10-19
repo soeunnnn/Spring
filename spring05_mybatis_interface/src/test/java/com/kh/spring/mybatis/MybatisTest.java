@@ -83,7 +83,7 @@ public class MybatisTest {
 		member.setEmail("pclass@kh.com");
 		member.setTell("010-0000-1111");
 		
-		int res = mybatisRepository.insertWithDto(member.getUserId(), member.getPassword(), member.getTell(), member.getEmail());
+		mybatisRepository.insertWithDto("soeun", "asdfg", "pclass@kh.com", "010-2222-2233");
 		//session.insert(NAMESPACE + "insertWithDto", member);
 	}
 	
@@ -113,6 +113,7 @@ public class MybatisTest {
 		member.setUserId("DEV");
 		member.setPassword("ppppp");
 		
+		mybatisRepository.update("1234", "DEV");
 		//session.update(NAMESPACE + "update", member);
 	}
 	
@@ -182,6 +183,8 @@ public class MybatisTest {
 		//사용자가 선택한 필터 : info
 		//사용자가 입력한 키워드는 : 김애란
 		//session.selectList(NAMESPACE + "dynamicChoose", Map.of("keyword", "사랑"));
+		
+		mybatisRepository.dynamicChoose("사랑");
 	}
 	
 	@Test

@@ -3,6 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
+  
+  <!-- mapper에서 만들어지는 프록시랑 memberRepositoy에서 만들어지는 프록시를 합쳐서 하나의 프록시로 만들어주기 위해 타입을 맞춰줘야함 -->
   <mapper namespace="com.kh.spring.member.model.repository.MemberRepository">
   
   	<!--id값은 프록시객체의 메서드에 해당됨 / resultType은 어떤 타입으로 결과를 받을지 결정 -->

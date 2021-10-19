@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -32,12 +33,17 @@ public class MemberControllerTest {
 	}
 	
 	@Test
-	public void searchPassword() throws Exception {
-		mockMvc
-		 .perform(get("/search-pw"))
-		 .andExpect(status().isOk()) //응답이 200번로 넘어왔을때만 test가 통과되도록
-		 .andDo(print());
+	public void joinTest() throws Exception {
+		mockMvc.perform(post("/member/join")
+				.param("userId", "testMethod")
+				.param("password", "1234")
+				.param("tell", "010-2222-3333")
+				.param("email", "aaa@gbb.com"))
+		.andExpect(status().isOk())
+		.andDo(print());
+		
 	}
+
 	
 
 }

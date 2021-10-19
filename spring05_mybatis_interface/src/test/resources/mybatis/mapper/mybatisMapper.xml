@@ -3,7 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
+  <!-- 프록시 객체 타입을 맞추기 위해서 namespace 변경 (mybatisRepository 인터페이스로)  -->
   <mapper namespace="com.kh.spring.mybatis.MybatisRepository">
+  
   <!--
   	#{} vs ${}
   	#{} : PreparedStatement에서 쿼리템플릿을 완성 시킨 다음, 파라미터값을 전달받아 쿼리를 완성
@@ -39,7 +41,7 @@
   
     <!-- insert, update, delete 같은 경우는 반환받을 타입이 int 이기 때문에 resultType 지정 안해도 됨  -->
   
-  	<insert id="insertWithDto">
+  	<insert id="insertWithDto" parameterType="map">
   		insert into member(user_id, password, tell, email)
   		values(#{userId},#{password},#{tell},#{email})
   	</insert>
