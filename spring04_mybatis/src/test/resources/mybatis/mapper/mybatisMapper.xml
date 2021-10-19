@@ -12,9 +12,6 @@
     	  문자열 이스케이프처리가 되지 앟음 -> SQL injection 공격에 취약하다.
     -->
   
-  
-  
-  
   	<select id="selectPasswordByUserId" resultType="string">  <!--id값은 메서드이름에 해당함? / resultType은 어떤 타입으로 결과를 받을지 결정 -->
   		select password from member where user_id = #{userId}
   	</select>
@@ -81,6 +78,16 @@
   	<update id="procedure" statementType="CALLABLE">
   		{call sp_rent_extend(#{rbIdx, mode=IN})}  <!-- 프로시저의 매개변수는 in(입력용), out(반환용), inout(둘다) 변수가 있음  -->
   	</update>
+  	
+  	<insert id="procedureUseTypeHandler">
+  		{call sp_rent_insert(
+  			#{userId, mode=IN}
+  			,#{title, mode=IN}
+  			,#{rentBookCnt, mode=IN}
+  			,#{bkIdxs, mode=IN, typeHandler=com.kh.spring.common.mybatis.BkIdxsTypeHandler}
+  		)}
+  	</insert>
+  	
 
 	<insert id="test01">
 		insert into book(TITLE, AUTHOR, BK_IDX)
