@@ -83,7 +83,7 @@ public class MybatisTest {
 		member.setEmail("pclass@kh.com");
 		member.setTell("010-0000-1111");
 		
-		mybatisRepository.insertWithDto("soeun", "asdfg", "pclass@kh.com", "010-2222-2233");
+		mybatisRepository.insertWithDto("teststs", "asdfg", "pclass@kh.com", "010-2222-2233");
 		//session.insert(NAMESPACE + "insertWithDto", member);
 	}
 	
@@ -113,7 +113,7 @@ public class MybatisTest {
 		member.setUserId("DEV");
 		member.setPassword("ppppp");
 		
-		mybatisRepository.update("1234", "DEV");
+		mybatisRepository.update(member);
 		//session.update(NAMESPACE + "update", member);
 	}
 	

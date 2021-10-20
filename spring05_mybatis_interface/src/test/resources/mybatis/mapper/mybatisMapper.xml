@@ -41,7 +41,7 @@
   
     <!-- insert, update, delete 같은 경우는 반환받을 타입이 int 이기 때문에 resultType 지정 안해도 됨  -->
   
-  	<insert id="insertWithDto" parameterType="map">
+  	<insert id="insertWithDto">
   		insert into member(user_id, password, tell, email)
   		values(#{userId},#{password},#{tell},#{email})
   	</insert>

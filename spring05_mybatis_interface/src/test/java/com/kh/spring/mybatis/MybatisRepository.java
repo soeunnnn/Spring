@@ -33,7 +33,7 @@ public interface MybatisRepository {
 	int delete(String userId);
 
 	@Update("update member set password = #{password} where user_id = #{userId}")
-	int update(String password, String userId);
+	int update(Member member);
 	
 	int procedureUseTypeHandler(String userId, String title, int rentBookCnt, String bkIdxs);
 	

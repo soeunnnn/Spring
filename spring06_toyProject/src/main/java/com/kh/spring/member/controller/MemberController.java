@@ -1,15 +1,31 @@
 package com.kh.spring.member.controller;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.util.CookieGenerator;
 
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
+import com.kh.spring.member.validator.JoinForm;
+import com.kh.spring.member.validator.JoinFormValidator;
 
 	//1. @Controller : 해당 클래스를 applicationContext에 bean으로 등록
 	//					Controller와 관련된 annotation을 사용할 수 있게 해준다.
@@ -26,7 +42,7 @@ import com.kh.spring.member.model.service.MemberService;
 	//					application/x-www-form-urlEncoded를 지원하지 않는다.
 	//8. @RequestHeader : 요청 헤더를 메서드의 매개변수에 바인드
 	//9. @SessionAttribute : 원하는 session의 속성값을 매개변수에 바인드
-	//10. @CookieVariable : 원하는 cookie값을 매개변수에 바인드
+	//10. @CookieValue : 원하는 cookie값을 매개변수에 바인드
 	//11. @PathVariable : url 템플릿에 담긴 파라미터값을 매개변수에 바인드
 	//12. @ResponseBody : 메서드가 반환하는 값을 응답 body에 작성
 	//13. Servlet객체를 컨트롤러의 매개변수에 선언해 주입받을 수 있다.
@@ -36,16 +52,93 @@ import com.kh.spring.member.model.service.MemberService;
 @RequestMapping("member")  //밑에서 mapping에 url작성할 때 앞에 member 생략가능
 public class MemberController {
 	
-	@Autowired
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	private MemberService memberService;
+	private JoinFormValidator joinFormValidator;
 	
-	@GetMapping("join-form")
-	public void joinForm() {}
+	//주입받아야하는 것들만 매개변수가 있는 생성자로 만들기
+	public MemberController(MemberService memberService, JoinFormValidator joinFormValidator) {
+		super();
+		this.memberService = memberService;
+		this.joinFormValidator = joinFormValidator;
+	}
 	
-	@PostMapping("join")
-	public String join(Member member) {
-		memberService.insertMember(member);
-		return "index";
+	@InitBinder(value ="joinForm") 
+	public void initBinder(WebDataBinder webDataBinder) { //컨트롤러로 넘어오기 전에 파라미터 값들을 객체에 바인더 해주는 역
+		webDataBinder.addValidators(joinFormValidator); //요청 파라미터 값들을 바인더 해주기 전에 밸리데이터 검증하도록
 	}
 
+	@GetMapping("join-form")  //   member/join-form.jsp로 요청을 재지정해줌
+	public void joinForm() {}
+	
+	@PostMapping("join")  //join-form.jsp의 메서드가 post니까 PostMapping, 들어오는 요청이랑 돌려보내야하는 jsp위치가 다르므로 리턴타입을 String으로
+	public String join(@Validated JoinForm form
+			, Errors errors //errors -> 반드시 검증될 객체 바로 뒤에 작성
+			) {
+		
+		if(errors.hasErrors()) { //통과된 친구가 있는지 없는지 알려줌
+			return "member/join-form";
+		}
+		
+		memberService.insertMember(form);
+		return "index";
+	}
+	
+	@PostMapping("join-json")
+	public String joinwithJson(@RequestBody Member member) {
+		logger.debug(member.toString());
+		return "index";
+	}
+	
+	//로그인 페이지 이동 메서드
+	//메서드명 : login
+	@GetMapping("login")
+	public void login() {}
+
+	//로그인 실행 메서드
+	//메서드명 : loginImpl
+	//재지정할 jsp : mypage
+	@PostMapping("login") // /member/login경로로 요청이 왔을때 호출되어야 할 메서드
+	public String loginImpl(Member member, HttpSession session) {
+		
+		Member certifiedUser = memberService.authenticateUser(member);
+		session.setAttribute("authentication", certifiedUser); //세션에 회원정보 담아주기
+		logger.debug(certifiedUser.toString());
+		return "redirect:/member/mypage";  //=>response.sendRedirect랑 같음
+	}
+	
+	@GetMapping("mypage")
+	public String mypage(@CookieValue(name="JSESSIONID") String sessionId //원하는 쿠키값 가져와서 String에 넣어줌
+					  , @SessionAttribute(name="authentication") Member member   //우리가 원하는 세션의 속성값을 받아와서 member에 넣어줌
+					  , HttpServletResponse response) { //request, response는 웬만하면 쓰지말기
+		
+		//Cookie 생성 및 응답헤더에 추가
+		CookieGenerator cookieGenerator = new CookieGenerator();
+		cookieGenerator.setCookieName("testCookie"); //이름 붙여주고
+		cookieGenerator.addCookie(response, "test_cookie");  //쿠키값 추가해줌
+		
+		logger.debug("@CookieValue : " + sessionId);
+		logger.debug("@SessionAttribute : " + member);
+		
+		return "member/mypage";
+	}
+	
+	@GetMapping("id-check") //joinForm.js에서 id-check로 넘어오는거 매핑
+	@ResponseBody //리턴하는 값이 responseBody에 직접 들어가게 됨
+	public String idCheck(String userId) { //요청파라미터 이름이 userId인 파라미터값을 String userId에 매핑해줌
+		Member member = memberService.selectMemberByUserId(userId);
+		
+		if(member == null) {
+			return "available";
+		} else {
+			return "disable";
+		}
+
+	}
+	
+	
+	
+	
+	
 }

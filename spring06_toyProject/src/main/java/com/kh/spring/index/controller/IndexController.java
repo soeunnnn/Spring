@@ -21,7 +21,7 @@ public class IndexController {
 	//					application/x-www-form-urlEncoded를 지원하지 않는다.
 	//8. @RequestHeader : 요청 헤더를 메서드의 매개변수에 바인드
 	//9. @SessionAttribute : 원하는 session의 속성값을 매개변수에 바인드
-	//10. @CookieVariable : 원하는 cookie값을 매개변수에 바인드
+	//10. @CookieValue : 원하는 cookie값을 매개변수에 바인드
 	//11. @PathVariable : url 템플릿에 담긴 파라미터값을 매개변수에 바인드
 	//12. @ResponseBody : 메서드가 반환하는 값을 응답 body에 작성
 	//13. Servlet객체를 컨트롤러의 매개변수에 선언해 주입받을 수 있다.
@@ -33,10 +33,9 @@ public class IndexController {
 		
 		//Controller 메서드의 return타입
 		//void : 해당 메서드가 호출된 url의 경로와 같은 위치에 있는 jsp파일로 요청을 재지정
-		//		요청 url : /index/index -> WEB-INF/views/index/index.jsp
+		//		요청 url : /index/index -> WEB-INF/views/index/index.jsp (servlet-context의 InternalResourceViewResolver가 앞의 위치 붙여줌)
 		//String : 반환하는 값이 jsp파일의 위치, return "index/index" -> WEB-INF/views/index/index.jsp
 		//ModelAndfView : Model객체 + view(jsp파일의 경로)
-		
 		
 		return "index";
 	}

@@ -11,7 +11,7 @@
 
 <c:if test="${empty authentication}"> <!-- authentication의 존재유무를 확인 -->
 
-<h2><a href="/member/login-form">login</a></h2>  <!-- login을 누르면 href에서 지정한 경로가 호출됨 -->
+<h2><a href="/member/login">login</a></h2>  <!-- login을 누르면 href에서 지정한 경로가 호출됨 -->
 <h2><a href="/member/join-form">회원가입</a></h2>
 
 </c:if>
