@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -20,8 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.CookieGenerator;
 
+import com.kh.spring.common.code.ErrorCode;
+import com.kh.spring.common.exception.HandlableException;
+import com.kh.spring.common.validator.ValidateResult;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
 import com.kh.spring.member.validator.JoinForm;
@@ -63,22 +69,35 @@ public class MemberController {
 		this.memberService = memberService;
 		this.joinFormValidator = joinFormValidator;
 	}
-	
-	@InitBinder(value ="joinForm") 
+
+	/*  Model 속성명 자동 생성 규칙
+		com.myapp.Product becomes "product"
+		com.myapp.MyProduct becomes "myProduct"
+		com.myapp.UKProduct becomes "UKProduct"
+	*/
+	@InitBinder(value ="joinForm") //model의 속성 중 속성명이 joinForm인 속성이 있는 경우 InitBinder 메서드 실행
 	public void initBinder(WebDataBinder webDataBinder) { //컨트롤러로 넘어오기 전에 파라미터 값들을 객체에 바인더 해주는 역
 		webDataBinder.addValidators(joinFormValidator); //요청 파라미터 값들을 바인더 해주기 전에 밸리데이터 검증하도록
 	}
 
-	@GetMapping("join-form")  //   member/join-form.jsp로 요청을 재지정해줌
-	public void joinForm() {}
+	@GetMapping("join")  //   member/join-form.jsp로 요청을 재지정해줌
+	public void joinForm(Model model) { //모델 넣어놓기
+		model.addAttribute(new JoinForm()).addAttribute("error", new ValidateResult().getError());
+		//throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
+	}
 	
 	@PostMapping("join")  //join-form.jsp의 메서드가 post니까 PostMapping, 들어오는 요청이랑 돌려보내야하는 jsp위치가 다르므로 리턴타입을 String으로
 	public String join(@Validated JoinForm form
 			, Errors errors //errors -> 반드시 검증될 객체 바로 뒤에 작성
+			, Model model
 			) {
 		
+		ValidateResult vr = new ValidateResult();
+		model.addAttribute("error", vr.getError()); //error라는 키값으로 넣어놓기
+		
 		if(errors.hasErrors()) { //통과된 친구가 있는지 없는지 알려줌
-			return "member/join-form";
+			vr.addErrors(errors); //에러를 넘겨줌
+			return "member/join";
 		}
 		
 		memberService.insertMember(form);
@@ -100,9 +119,16 @@ public class MemberController {
 	//메서드명 : loginImpl
 	//재지정할 jsp : mypage
 	@PostMapping("login") // /member/login경로로 요청이 왔을때 호출되어야 할 메서드
-	public String loginImpl(Member member, HttpSession session) {
+	public String loginImpl(Member member, HttpSession session, RedirectAttributes redirecAttr) {
 		
 		Member certifiedUser = memberService.authenticateUser(member);
+		
+		//유저가 null이라면
+		if(certifiedUser == null) {
+			redirecAttr.addFlashAttribute("message", "아이디나 비밀번호가 정확하지 않습니다."); 
+			return "redirect:/member/login";
+		}
+		
 		session.setAttribute("authentication", certifiedUser); //세션에 회원정보 담아주기
 		logger.debug(certifiedUser.toString());
 		return "redirect:/member/mypage";  //=>response.sendRedirect랑 같음

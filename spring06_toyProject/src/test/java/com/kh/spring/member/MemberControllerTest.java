@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -38,6 +39,8 @@ public class MemberControllerTest {
 	
 	@Autowired //주입받기
 	WebApplicationContext wac;
+	@Autowired
+	JavaMailSenderImpl mailSender;
 	MockMvc mockMvc;
 	
 	@Before
@@ -48,7 +51,7 @@ public class MemberControllerTest {
 	@Test
 	public void joinTest() throws Exception {
 		mockMvc.perform(post("/member/join")  //post요청
-				.param("userId", "testMethod") //param 메서드를 사용해서 요청파라미터를 지정
+				.param("userId", "testMethod3") //param 메서드를 사용해서 요청파라미터를 지정
 				.param("password", "1234")
 				.param("tell", "010-2222-3333")
 				.param("email", "aaa@gbb.com"))
@@ -109,7 +112,6 @@ public class MemberControllerTest {
 		.andExpect(status().isOk())
 		.andDo(print());
 	}
-	
 	
 	
 

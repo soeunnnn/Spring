@@ -44,29 +44,48 @@ input[type=submit]{
         <tr>
            <td>ID : </td>
            <td >
-                <input type="text" name="userId" id="userId" size="10" required />
+                <input type="text" name="userId" id="userId" size="10" 
+                	<c:if test="${empty error.userId}">
+                      value="${joinForm.userId}"   
+                   	</c:if>
+                required />
                 <button type="button" id="btnIdCheck">check</button>
+                <c:if test="${empty error.userId}"> <!-- 에러가 발생하지 않았다면 -->
+                	<span id="idCheck" class="valid-msg"></span>
+                </c:if>
                 <form:errors path="userId" cssClass="valid-msg"/>  <!--member의 해당 속성이 밸리데이터 통과 못했을 경우 span태그를 자동으로 생성해서 spring에 작성한 에러메세지 출력해줌 -->
            </td>
         </tr>
         <tr>
            <td>PASSWORD : </td>
            <td>
-                <input type="password" name="password" id="password" placeholder="영어,숫자,특수문자 조합의 8글자 이상의 문자열입니다." required/>
+                <input type="password" name="password" id="password" placeholder="영어,숫자,특수문자 조합의 8글자 이상의 문자열입니다." 
+                	<c:if test="${empty error.password}">
+                      value="${joinForm.password}"   
+                 	</c:if>      
+                required/>
                 <form:errors path="password" cssClass="valid-msg"/>
            </td>
         </tr>
         <tr>
            <td>휴대폰번호 : </td>
            <td>
-                <input id="tell" type="tel" name="tell" placeholder="숫자만 입력하세요" required/>
+                <input id="tell" type="tel" name="tell" placeholder="숫자만 입력하세요"
+                	<c:if test="${empty error.tell}">
+                      value="${joinForm.tell}"   
+              		</c:if>
+                 required/>
                 <form:errors path="tell" cssClass="valid-msg"/>
            </td>
         </tr>
         <tr>
            <td>EMAIL : </td>
            <td>
-                <input type="email" name="email" required/>
+                <input type="email" name="email" 
+                	<c:if test="${empty error.email}">
+                      value="${joinForm.email}"   
+              		</c:if>
+                required/>
                 <form:errors path="email" cssClass="valid-msg"/>
            </td>
         </tr>
@@ -78,13 +97,9 @@ input[type=submit]{
    </table>
    </form:form>
    
-   
-	<%-- 
 	
     <script type="text/javascript" src="/resources/js/member/joinForm.js"></script>
-    
-   --%>
-   
+
    
 
 
