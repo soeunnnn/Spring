@@ -41,11 +41,6 @@
   
     <!-- insert, update, delete 같은 경우는 반환받을 타입이 int 이기 때문에 resultType 지정 안해도 됨  -->
   
-  	<insert id="insertWithDto">
-  		insert into member(user_id, password, tell, email)
-  		values(#{userId},#{password},#{tell},#{email})
-  	</insert>
-  	
   	<insert id="insertWithMap">
   		insert into rent_master(rm_idx,user_id,title,rent_book_cnt)
   		values(sc_rm_idx.nextval,#{member.userId},#{title},#{rentBookCnt})
@@ -57,9 +52,7 @@
   	 statement, prepared, callable
   	-->
   	
-  	<update id="procedure" statementType="CALLABLE">
-  		{call sp_rent_extend(#{rbIdx, mode=IN})}  <!-- 프로시저의 매개변수는 in(입력용), out(반환용), inout(둘다) 변수가 있음  -->
-  	</update>
+ <!-- 프로시저의 매개변수는 in(입력용), out(반환용), inout(둘다) 변수가 있음  -->
   	
   	<insert id="procedureUseTypeHandler">
   		{call sp_rent_insert(

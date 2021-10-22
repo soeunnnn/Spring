@@ -78,25 +78,26 @@ public class MybatisTest {
 	@Test
 	public void insertWithDto() {
 		Member member = new Member();
-		member.setUserId("DEV");
+		member.setUserId("test2");
 		member.setPassword("abcdefg");
 		member.setEmail("pclass@kh.com");
 		member.setTell("010-0000-1111");
 		
-		mybatisRepository.insertWithDto("teststs", "asdfg", "pclass@kh.com", "010-2222-2233");
+		mybatisRepository.insertWithDto(member);
 		//session.insert(NAMESPACE + "insertWithDto", member);
 	}
 	
 	@Test
 	public void insertWithMap() {
 		Member member = new Member();
-		member.setUserId("spring-easy");
+		member.setUserId("test2");
 		
 		Map<String,Object> commandMap = new HashMap<String,Object>();
 		commandMap.put("member", member);
 		commandMap.put("title", "세션과 일곱 쿠키들");
 		commandMap.put("rentBookCnt", 1);
 		
+		mybatisRepository.insertWithMap(commandMap);
 		//session.insert(NAMESPACE + "insertWithMap", commandMap);
 	}
 	
@@ -119,6 +120,7 @@ public class MybatisTest {
 	
 	@Test
 	public void procedure() {
+		mybatisRepository.procedure("1");
 		//session.update(NAMESPACE + "procedure", "100001");
 	}
 
@@ -134,6 +136,10 @@ public class MybatisTest {
 	// 메서드 이름 : test01
 	@Test
 	public void test01() {
+		Map<String, Object> commandMap = new HashMap<>();
+		commandMap.put("title", "쿠키와 세션2");
+		commandMap.put("author", "김영아");
+		mybatisRepository.test01(Map.of("title", "쿠키와 세션3", "author", "김영아"));
 		//session.insert(NAMESPACE + "test01", Map.of("title", "쿠키와 세션", "author", "김영아"));
 	}
 
@@ -153,9 +159,7 @@ public class MybatisTest {
 	// 메서드 이름 : test03
 	@Test
 	public void test03() {
-		Map<String, Object> dateMap = new HashMap<String, Object>();
-		dateMap.put("date1", "20210901");
-		dateMap.put("date2", "20211001");
+		mybatisRepository.test03(Map.of("date1", "20210901", "date2", "20211021"));
 		//session.delete(NAMESPACE + "test03", dateMap);
 	}
 
@@ -163,6 +167,7 @@ public class MybatisTest {
 	// 메서드 이름 : test04
 	@Test
 	public void test04() {
+		mybatisRepository.test04();
 		//session.selectList(NAMESPACE+"test04");
 	}
 
@@ -173,6 +178,7 @@ public class MybatisTest {
 		//사용자가 선택한 필터 : info
 		//사용자가 입력한 키워드는 : 김애란
 		//session.selectList(NAMESPACE + "dynamicIf", Map.of("filter","author", "keyword", "김애란"));
+		mybatisRepository.dynamicIf(Map.of("filter","author", "keyword", "김애란"));
 	}
 	
 	@Test
@@ -183,8 +189,7 @@ public class MybatisTest {
 		//사용자가 선택한 필터 : info
 		//사용자가 입력한 키워드는 : 김애란
 		//session.selectList(NAMESPACE + "dynamicChoose", Map.of("keyword", "사랑"));
-		
-		mybatisRepository.dynamicChoose("사랑");
+		mybatisRepository.dynamicChoose(Map.of("keyword", "사랑"));
 	}
 	
 	@Test
@@ -195,6 +200,7 @@ public class MybatisTest {
 		//키워드에 '김애란'을 입력할 경우, 제목, 작가, 내용 중에서 하나라도 김애란이 조회되면 해당 도서 반환
 		String[] filters = {"author", "info"};
 		//session.selectList(NAMESPACE + "dynamicForeachAndWhereTag", Map.of("filters", filters, "keyword", "김애란"));
+		mybatisRepository.dynamicForeachAndWhereTag(Map.of("filters", filters, "keyword", "김애란"));
 	}
 	
 	@Test
@@ -205,12 +211,14 @@ public class MybatisTest {
 		//키워드에 '김애란'을 입력할 경우, 제목, 작가, 내용 중에서 하나라도 김애란이 조회되면 해당 도서 반환
 		String[] filters = {"author", "info"};
 		//session.selectList(NAMESPACE + "test05", Map.of("filters", filters, "keyword", "김애란"));
+		mybatisRepository.test05(Map.of("filters", filters, "keyword", "김애란"));
 	}
 	
 	@Test
 	public void dynamicForeachWithList() {
 		//사용자가 선택한 도서명 중에서 DB에 존재하는 도서를 모두 반환
 		//session.selectList(NAMESPACE +"dynamicForeachWithList", List.of("비행운", "남한산성", "오징어게임"));
+		mybatisRepository.dynamicForeachWithList(List.of("비행운", "남한산성", "오징어게임"));
 	}
 	
 	@Test
@@ -223,6 +231,10 @@ public class MybatisTest {
        //                  ,"data",Map.of("title","서블릿과 스프링의 차이","author","최범균")
         //                 )
          //       );
+		mybatisRepository.insertTemplate(Map.of("tableName","book"
+		        							,"sec",Map.of("colName","bk_idx","val","sc_bk_idx.nextval")
+			                                ,"data",Map.of("title","서블릿과 스프링의 차이","author","최범균")
+			       						));
 	}
 
 	@Test
@@ -232,6 +244,7 @@ public class MybatisTest {
 	    member.setEmail("AAAA@AAA.com");
 	    member.setTell("010-2222-3333");
 	    //session.update(NAMESPACE + "dynamicSet",member);
+	    mybatisRepository.dynamicSet(Map.of("userId", "test2", "password", "1234"));
 	}
 	
 	@Test
