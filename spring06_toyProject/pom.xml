@@ -45,6 +45,13 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>5.3.10</version>
 		</dependency>
+		<!--https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto-->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+			<version>5.5.2</version>
+		</dependency>
+		
 		
 				
 		<!-- AspectJ -->
@@ -169,8 +176,15 @@
 			<artifactId>javax.mail</artifactId>
 			<version>1.6.2</version>
 		</dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok (getter,setter,생성자 자동생성) -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.20</version>
+			<scope>provided</scope>
+		</dependency>
 		
-	
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -191,9 +205,7 @@
 			<scope>test</scope>
 		</dependency>
 		
-		
-		
-		        
+
 	</dependencies>
     <build>
         <plugins>

@@ -1,5 +1,7 @@
 package com.kh.spring.member.controller;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,7 +93,11 @@ public class MemberController {
 	public String join(@Validated JoinForm form
 			, Errors errors //errors -> 반드시 검증될 객체 바로 뒤에 작성
 			, Model model
+			, HttpSession session
+			, RedirectAttributes redirectAttr
 			) {
+		
+		logger.debug("post 조인메서드 세션아이디 확인 : " + session.getId());
 		
 		ValidateResult vr = new ValidateResult();
 		model.addAttribute("error", vr.getError()); //error라는 키값으로 넣어놓기
@@ -100,8 +107,37 @@ public class MemberController {
 			return "member/join";
 		}
 		
+		//token 생성
+		String token = UUID.randomUUID().toString();
+		session.setAttribute("persistUser",  form); //회원가입때 입력한 정보 저장
+		session.setAttribute("persistToken", token); //토큰 저장
+		
+		memberService.authenticateByEmail(form, token);
+		redirectAttr.addFlashAttribute("message", "이메일이 발송되었습니다.");
+		
+		return "redirect:/";
+	}
+	
+	@GetMapping("join-impl/{token}") //회원가입 진행하는 부분
+	public String joinImpl(@PathVariable String token //<-이 매개변수랑 GetMapping어노테이션 안의 변수명과 같아야함(어노테이션쪽으로 넘어온 토큰값이 자동으로 스트링변수에 매핑됨)
+						,@SessionAttribute(value="persistToken", required = false) String persistToken //세션에 담겨있는 persistToken값을 String persistToekn에 담기
+						,@SessionAttribute(value = "persistUser", required = false) JoinForm form
+						,HttpSession session
+						,RedirectAttributes redirectAttrs){
+		
+		logger.debug(session.getId());
+		logger.debug(persistToken);
+		logger.debug(token);
+	
+		if(!token.equals(persistToken)) {
+			throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
+		}
+		
 		memberService.insertMember(form);
-		return "index";
+		redirectAttrs.addFlashAttribute("message", "회원가입을 환영합니다. 로그인 해주세요.");
+		session.removeAttribute("persistToken");
+		session.removeAttribute("persistUser");
+		return "redirect:/member/login";
 	}
 	
 	@PostMapping("join-json")

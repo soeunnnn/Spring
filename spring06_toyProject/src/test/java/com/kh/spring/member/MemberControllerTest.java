@@ -53,7 +53,7 @@ public class MemberControllerTest {
 		mockMvc.perform(post("/member/join")  //post요청
 				.param("userId", "testMethod3") //param 메서드를 사용해서 요청파라미터를 지정
 				.param("password", "1234")
-				.param("tell", "010-2222-3333")
+				.param("tell", "01022223333")
 				.param("email", "aaa@gbb.com"))
 		.andExpect(status().isOk()) //요청 보내기(200번인지 확인)
 		.andDo(print());
