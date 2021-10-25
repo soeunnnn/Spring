@@ -171,8 +171,8 @@ public class MemberController {
 	}
 	
 	@GetMapping("mypage")
-	public String mypage(@CookieValue(name="JSESSIONID") String sessionId //원하는 쿠키값 가져와서 String에 넣어줌
-					  , @SessionAttribute(name="authentication") Member member   //우리가 원하는 세션의 속성값을 받아와서 member에 넣어줌
+	public String mypage(@CookieValue(name="JSESSIONID", required = false) String sessionId //원하는 쿠키값 가져와서 String에 넣어줌
+					  , @SessionAttribute(name="authentication", required = false) Member member   //우리가 원하는 세션의 속성값을 받아와서 member에 넣어줌
 					  , HttpServletResponse response) { //request, response는 웬만하면 쓰지말기
 		
 		//Cookie 생성 및 응답헤더에 추가

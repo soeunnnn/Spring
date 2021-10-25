@@ -35,7 +35,7 @@ public class MemberService {
 	public Member authenticateUser(Member member) {
 		Member storedMember = memberRepository.selectMemberByUserId(member.getUserId());
 		
-		if(passwordEncoder.matches(member.getPassword(), storedMember.getPassword())) { //사용자가 입력한 값과 디비에 저장되어 있는 패스워드 비교
+		if(storedMember != null && passwordEncoder.matches(member.getPassword(), storedMember.getPassword())) { //사용자가 입력한 값과 디비에 저장되어 있는 패스워드 비교
 			return storedMember;
 		}
 		

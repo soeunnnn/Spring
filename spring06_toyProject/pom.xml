@@ -52,13 +52,16 @@
 			<version>5.5.2</version>
 		</dependency>
 		
-		
-				
 		<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>${org.aspectj-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.9.7</version>
 		</dependency>	
 		
 		<!-- Logging -->
@@ -150,6 +153,21 @@
 			<artifactId>spring-orm</artifactId>
 			<version>5.3.10</version>
 		</dependency>
+		
+		<!-- 파일 다운로드/업로드  -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+		<!-- 	http://commons.apache.org/proper/commons-fileupload  -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
+		
+		
 		
 		<!-- Servlet -->
 		<dependency>
