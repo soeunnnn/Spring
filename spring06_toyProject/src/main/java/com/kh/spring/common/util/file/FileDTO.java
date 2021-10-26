@@ -2,6 +2,8 @@ package com.kh.spring.common.util.file;
 
 import java.sql.Date;
 
+import com.kh.spring.common.code.Config;
+
 public class FileDTO {
    
    private String flIdx;
@@ -68,8 +70,13 @@ public class FileDTO {
       this.isDel = isDel;
    }
    
-   public String getDownloadLink() {
-      return "/file/" + savePath + renameFileName + "?originFileName=" + originFileName;
+   public String getLink() {
+      return Config.DOMAIN.DESC + "/file/" + savePath + renameFileName;
+   }
+   
+   //다운로드 시 사용할 패스 (브라우저에서 경로요청이 절대경로로 요청을 하기때문에 절대경로로 붙여줌)
+   public String getDownloadPath() {
+	   return Config.UPLOAD_PATH.DESC + savePath; 
    }
    
    @Override
